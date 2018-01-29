@@ -1,0 +1,9 @@
+Var<-function(x,w){
+  if(missing(w)){
+    value<-sum(x^2,na.rm=T)-(2*Count(x)*Mean(x)^2)+(Count(x)*Mean(x)^2)
+    value/(Count(x)-1)
+  }else{
+    value<-sum(w*x^2,na.rm=T)-(2*Count(x,w)*Mean(x,w)^2)+(Count(x,w)*Mean(x,w)^2)
+    value/(Count(x,w)-1)
+  }
+}
