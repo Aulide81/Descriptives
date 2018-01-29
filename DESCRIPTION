@@ -1,0 +1,11 @@
+Package: estadisticos
+Type: Package
+Title: Tools for descriptive analisys
+Version: 29.01.18
+Date: 2018-29-01
+Author: Emilio Arenas <emiliojat@gmail.com>
+Maintainer: Emilio Arenas <emiliojat@gmail.com>
+Description: Tools for descriptive analisys
+License: GPL
+URL: https://github.com/Aulide81/Descriptives
+Suggests: knitr
