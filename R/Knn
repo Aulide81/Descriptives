@@ -2,49 +2,45 @@ Knn<-function(x,y,w,k,classif){
 if(k<2) stop("K must be greater than one")
   
 if(missing(classif)){  
-x<-apply(x,1,function(k){
-  apply(x,1,function(j)sum((k-j)^2))
-})
-diag(x)<-NA
-x<-t(apply(x,1,order))[,c(1:k),drop=F]
-
-if(missing(w)){
-candidatos<-t(apply(x,1,function(k)y[k]))
-grupos<-apply(candidatos,1,function(k){
-  a<-table(k)
-  names(a)[which.max(a)]
-  })
-}else{
-  candidatos<-t(apply(orden,1,function(k)
-    c(y[k],w[k])))
-  grupos<-apply(candidatos,1,function(j){
-    a<-tapply(j[(k+1):(k*2)],list(j[1:k]),sum)
-    names(a)[which.max(a)]
-  })
-}
-return(grupos)
-}else{
-  
-  x<-apply(x,1,function(k){
-    apply(classif,1,function(j)sum((k-j)^2))
-  })
-  diag(x)<-NA
-  x<-t(apply(x,1,order))[,c(1:k),drop=F]
-  
-  if(missing(w)){
-    candidatos<-t(apply(x,1,function(k)y[k]))
-    grupos<-apply(candidatos,1,function(k){
-      a<-table(k)
-      names(a)[which.max(a)]
-    })
+    x<-apply(x,1,function(k){rowSums(t(t(x)-k)^2)})
+    diag(x)<-NA
+    x<-t(apply(x,1,order))[,c(1:k),drop=F]
+    
+    if(missing(w)){
+      candidatos<-t(apply(x,1,function(k)y[k]))
+      grupos<-apply(candidatos,1,function(k){
+        a<-table(k)
+        names(a)[which.max(a)]
+      })
+    }else{
+      candidatos<-t(apply(orden,1,function(k)
+        c(y[k],w[k])))
+      grupos<-apply(candidatos,1,function(j){
+        a<-tapply(j[(k+1):(k*2)],list(j[1:k]),sum)
+        names(a)[which.max(a)]
+      })
+    }
+    return(grupos)
   }else{
-    candidatos<-t(apply(orden,1,function(k)
-      c(y[k],w[k])))
-    grupos<-apply(candidatos,1,function(j){
-      a<-tapply(j[(k+1):(k*2)],list(j[1:k]),sum)
-      names(a)[which.max(a)]
-    })
+    
+    x<-apply(x,1,function(k){rowSums(t(t(classif)-k)^2)})
+    diag(x)<-NA
+    x<-t(apply(x,1,order))[,c(1:k),drop=F]
+    
+    if(missing(w)){
+      candidatos<-t(apply(x,1,function(k)y[k]))
+      grupos<-apply(candidatos,1,function(k){
+        a<-table(k)
+        names(a)[which.max(a)]
+      })
+    }else{
+      candidatos<-t(apply(orden,1,function(k)
+        c(y[k],w[k])))
+      grupos<-apply(candidatos,1,function(j){
+        a<-tapply(j[(k+1):(k*2)],list(j[1:k]),sum)
+        names(a)[which.max(a)]
+      })
+    }
+    return(grupos)
   }
-  return(grupos)
-}
 }
