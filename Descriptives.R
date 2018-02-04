@@ -1,9 +1,3 @@
-library(data.table)
-library(estadisticos)
-
-df<-readRDS("vivo_dt.RDS")
-df<-readRDS("vivo.RDS")
-
 .desc<-function(x,w,stat,dec){
   count<-sum(w[!is.na(x)],na.rm=T)
   sum_x<-sum(x*w,na.rm=T)
@@ -537,31 +531,21 @@ covariance<-function(x,y,w,cor=F){
 
 
 ##analisis factorial por componentes principales
-
-x<-as.matrix(iris[,c(1:4)])
-x_cor<-covariance(x,cor=T)
-
-descomp<-eigen(x_cor)
-cargas<-descomp$vectors[,c(1:3)]%*%sqrt(diag(descomp$values[1:3]))
-cargas_rot<-varimax(cargas,normalize=F)
-print(cargas_rot$loadings,sort=F,cutoff=0)
-
-
-
-
-cargas<-rep(NA,length(cargas_rot$loadings))
-for(i in 1:length(cargas)){
-  cargas[i]<-cargas_rot$loadings[[i]]
-}
-cargas<-matrix(cargas,ncol=4)
-apply(cargas,2,function(k)sum(k^2))
-
-betas<-solve(x_cor,cargas)
-
-betas_cte<-betas
-
-scores<-zx%*%betas
-covariance(scores,cor=T)
+#x<-as.matrix(iris[,c(1:4)])
+#x_cor<-covariance(x,cor=T)
+#descomp<-eigen(x_cor)
+#cargas<-descomp$vectors[,c(1:3)]%*%sqrt(diag(descomp$values[1:3]))
+#cargas_rot<-varimax(cargas,normalize=F)
+#print(cargas_rot$loadings,sort=F,cutoff=0)
+#cargas<-rep(NA,length(cargas_rot$loadings))
+#for(i in 1:length(cargas)){
+#  cargas[i]<-cargas_rot$loadings[[i]]
+#}
+#cargas<-matrix(cargas,ncol=4)
+#apply(cargas,2,function(k)sum(k^2))
+#betas<-solve(x_cor,cargas)
+#scores<-zx%*%betas
+#covariance(scores,cor=T)
 
 
 
