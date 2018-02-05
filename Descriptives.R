@@ -528,6 +528,60 @@ covariance<-function(x,y,w,cor=F){
     }
   }
 }
+            
+freq<-function (x, ...) {UseMethod("freq", x)}
+freq.character<-function (x, ...) {.frequencies(x, ...)}
+freq.factor<-function (x, ...) {.frequencies(x, ...)}
+freq.numeric<-function (x, ...) {.frequencies(x, ...)}
+freq.logical<-function (x, ...) {.frequencies(x, ...)}
+freq.data.frame<-function (x, ...) {lapply(x, .frequencies, ...)}
+freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
+
+.frequencies<-function(x,w,order,dec=1){
+  if (missing(w)) w<-rep(1,length(x))
+  n<-sum(w[!is.na(x)],na.rm = T)
+  N<-sum(w,na.rm = T)
+  
+  absolutos<-suppressWarnings(rowsum(w,x))
+  pct<-(absolutos/N)*100
+  vpct<-(absolutos/n)*100
+  if (n!=N) vpct[length(vpct)]<-NA
+  
+  tabla<-cbind(absolutos,pct,vpct)
+  
+  if(is.numeric(x) & !is.null(attributes(x)$val.lab)){
+    labelsx<-attributes(x)$val.lab
+    name<-as.numeric(rownames(tabla))
+    labelsx<-names(labelsx[match(name,labelsx)])
+    labelsx[is.na(labelsx)]<-""
+    rownames(tabla)<-paste(rownames(tabla),labelsx)
+  }
+  
+  if (!missing(order)){
+    if(order=="d"){
+      tabla<-tabla[order(-vpct),]  
+    }else if (order=="a"){
+      tabla<-tabla[order(vpct),]  
+    }
+  }
+  
+  tabla<-cbind(tabla,cumsum(tabla[,3]))
+  colnames(tabla)<-c("Frec","Pct","Valid.Pct","Cum.Pct")
+  
+  tabla<-structure(tabla,
+                   title=c(names(attr(x,"var.lab")),attr(x,"var.lab")),
+                   resumen=paste("Total Cases: ",round(N,0)," Valid Cases: ",round(n,0)),
+                   dec=dec,
+                   class=c(class(tabla),"Frequencies"))
+  return(tabla)
+  
+}
+
+print.Frequencies<-function(x){
+  cat(attr(x,"title"),"\n\n")
+  print.table(round(x,attr(x,"dec")),na.print="")
+  cat("\n",attr(x,"resumen"),"\n\n")
+}
 
 
 ##analisis factorial por componentes principales
