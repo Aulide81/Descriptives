@@ -556,7 +556,7 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
     labelsx[is.na(labelsx)]<-""
     rownames(tabla)<-paste(rownames(tabla),labelsx)
   }
-  
+  if (n!=N) rownames(tabla)[length(rownames(tabla))]<-" missing"
   if (!missing(order)){
     if(order=="d"){
       tabla<-tabla[order(-vpct),]  
