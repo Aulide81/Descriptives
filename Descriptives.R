@@ -547,7 +547,7 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
   vpct<-(absolutos/n)*100
   if (n!=N) vpct[length(vpct)]<-NA
   
-  tabla<-cbind(absolutos,pct,vpct)
+  tabla<-cbind(round(absolutos,0),pct,vpct)
   
   if(is.numeric(x) & !is.null(attributes(x)$val.lab)){
     labelsx<-attributes(x)$val.lab
@@ -565,8 +565,8 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
     }
   }
   
-  tabla<-cbind(tabla,cumsum(tabla[,3]))
-  colnames(tabla)<-c("Frec","Pct","Valid.Pct","Cum.Pct")
+  tabla<-as.data.frame(cbind(tabla,cumsum(tabla[,3])))
+  names(tabla)<-c("Frec","Pct","Valid.Pct","Cum.Pct")
   
   tabla<-structure(tabla,
                    title=c(names(attr(x,"var.lab")),attr(x,"var.lab")),
