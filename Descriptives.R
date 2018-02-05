@@ -566,7 +566,7 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
   }
   
   tabla<-cbind(tabla,cumsum(tabla[,3]))
-  names(tabla)<-c("Frec","Pct","Val.Pct","Cum.Pct")
+  colnames(tabla)<-c("Frec","Pct","Val.Pct","Cum.Pct")
   tabla[,1]<-round(tabla[,1],0)
   tabla[,2:4]<-round(tabla[,2:4],dec)
    
@@ -574,7 +574,7 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
   
   tabla<-structure(tabla,
                    title=c(names(attr(x,"var.lab")),attr(x,"var.lab")),
-                   resumen=paste("Total Cases: ",round(N,0)," Valid Cases: ",round(n,0)),
+                   resumen=paste("Total Cases:",round(N,0)," Valid Cases:",round(n,0)),
                    class=c(class(tabla),"Frequencies"))
   return(tabla)
   
