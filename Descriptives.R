@@ -565,22 +565,32 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
     }
   }
   
-  tabla<-as.data.frame(cbind(tabla,cumsum(tabla[,3])))
-  names(tabla)<-c("Frec","Pct","Valid.Pct","Cum.Pct")
+  tabla<-cbind(tabla,cumsum(tabla[,3]))
+  names(tabla)<-c("Frec","Pct","Val.Pct","Cum.Pct")
+  tabla[,1]<-round(tabla[,1],0)
+  tabla[,2:4]<-round(tabla[,2:4],dec)
+   
+  names(tabla)<-c("Frec","Pct","Val.Pct","Cum.Pct")
   
   tabla<-structure(tabla,
                    title=c(names(attr(x,"var.lab")),attr(x,"var.lab")),
                    resumen=paste("Total Cases: ",round(N,0)," Valid Cases: ",round(n,0)),
-                   dec=dec,
                    class=c(class(tabla),"Frequencies"))
   return(tabla)
   
 }
 
-print.Frequencies<-function(x){
-  cat(attr(x,"title"),"\n\n")
-  print(round(x,attr(x,"dec")),na.print="")
-  cat("\n",attr(x,"resumen"),"\n\n")
+function(x){
+  dimension<-dim(x)
+  col_names<-colnames(x)
+  row_names<-rownames(x)      
+  title<-attr(x,"title")
+  resumen<-attr(x,"resumen")
+  attributes(x) <- NULL
+  x<-structure(x,dim=dimension,dimnames=list(row_names,col_names))
+  cat(title,"\n\n")
+  print(x,na.print="")
+  cat("\n",resumen,"\n\n")
 }
 
 
