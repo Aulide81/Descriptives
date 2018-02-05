@@ -353,24 +353,24 @@ if(missing(w)){
     }
 }
 
-desc<-function(x,w,stat,dec){
+desc<-function(x,...){
   UseMethod("desc", x)
 }
 
-desc.data.frame<-function(x,w,stat,dec){
-  t(sapply(x,.desc,w,stat,dec))
+desc.data.frame<-function(x,...){
+  t(sapply(x,.desc,...))
 }
 
-desc.matrix<-function(x,w,stat,dec){
-  t(apply(x,2,.desc,w,stat,dec))
+desc.matrix<-function(x,...){
+  t(apply(x,2,.desc,...))
 }
 
-desc.numeric<-function(x,w,stat,dec){
- .desc(x,w,stat,dec)
+desc.numeric<-function(x,...){
+ .desc(x,...)
 }
 
-desc.logical<-function(x,w,stat,dec){
-  .desc(x,w,stat,dec)
+desc.logical<-function(x,...){
+  .desc(x,...)
 }
 
 means<-function(x,y,w,stat,dec){
