@@ -579,8 +579,8 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
   return(tabla)
   
 }
-
-function(x){
+            
+print.Frequencies<-function(x){
   dimension<-dim(x)
   col_names<-colnames(x)
   row_names<-rownames(x)      
