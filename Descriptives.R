@@ -579,7 +579,7 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
 
 print.Frequencies<-function(x){
   cat(attr(x,"title"),"\n\n")
-  print(round(x,attr(x,"dec")),na.print="")
+  print.table(round(x,attr(x,"dec")),na.print="")
   cat("\n",attr(x,"resumen"),"\n\n")
 }
 
