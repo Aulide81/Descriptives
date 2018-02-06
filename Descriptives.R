@@ -212,28 +212,31 @@ if(missing(cells)) cells<-"count"
 if(missing(dec)) dec<-1
 if(missing(title)) title<-""
   
-if(is.data.frame(x) & !missing(value)) {
+if(is.list(x) & !missing(value)) {
   if(missing(w)) w<-rep(1,nrow(x))  
     if(missing(y)){
       .crostab.d(x=x,w=w,cells=cells,dec=dec,value=value,title=title)
     }else{
       .crostab.d(x=x,y=y,w=w,cells=cells,dec=dec,value=value,title=title)
       }
-}else if (is.data.frame(x) & missing(value)) {
+}else if (is.list(x) & missing(value)) {
     if(missing(w)) w<-rep(1,nrow(x))
-    lapply(x,function(k).crostab(x=k,y=y,w=w,dec=dec,cells=cells))
+    if(is.list(y)){
+        lapply(x,function(k){
+        lapply(y,function(l).crostab(x=k,y=l,w=w,dec=dec,cells=cells))   
+        })
+    }else{
+        lapply(x,function(k).crostab(x=k,y=y,w=w,dec=dec,cells=cells))    
+    }
+    
 }else{
   if(missing(w)) w<-rep(1,length(x))
-  .crostab(x=x,y=y,w=w,dec=dec,cells=cells)
+  if(is.list(y)){
+      lapply(y,function(k).crostab(x=x,y=k,w=w,dec=dec,cells=cells))
+  }else{
+      .crostab(x=x,y=y,w=w,dec=dec,cells=cells)      
   }
 }
-
-Count<-function(x,w){
-if(missing(w)){
-    sum(!is.na(x),na.rm=T)
-  }else{
-    sum(w[!is.na(x)],na.rm=T)
-  }
 }
 
 Sum<-function(x,w){
