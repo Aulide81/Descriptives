@@ -329,7 +329,7 @@ desc<-function(x,...){
   UseMethod("desc", x)
 }
 
-desc.list<-function(x,...){
+desc.data.frame<-function(x,...){
   clases<-sapply(x,class)
 del_var<-clases%in%c("factor","character")
 row_names<-sapply(x,function(k)attr(k,"var.lab"))
