@@ -319,7 +319,24 @@ desc<-function(x,...){
 }
 
 desc.data.frame<-function(x,...){
-  t(sapply(x,.desc,...))
+  clases<-sapply(x,class)
+del_var<-clases%in%c("factor","character")
+row_names<-sapply(x,function(k)attr(k,"var.lab"))
+
+if(sum(del_var)==0){
+  matriz<-t(sapply(x,.desc,...))
+  rownames(matriz)<-paste(rownames(matriz),substr(row_names,1,30))
+  return(matriz)
+  cat("\n")
+  
+  return(matriz)
+}else{
+  matriz<-t(sapply(x[,!del_var,drop=F],.desc,...))
+  rownames(matriz)<-paste(rownames(matriz),substr(row_names[!del_var],1,30))
+  cat("Not numeric variables:",names(x)[del_var],"\n\n")
+  return(matriz)
+  cat("\n")
+}
 }
 
 desc.matrix<-function(x,...){
