@@ -1,54 +1,3 @@
-.desc<-function(x,w,stat,dec){
-  count<-sum(w[!is.na(x)],na.rm=T)
-  sum_x<-sum(x*w,na.rm=T)
-  mean<-sum_x/count
-  Min<-min(x,na.rm=T)
-  Max<-max(x,na.rm=T)
-  Var<-sum(x^2*w,na.rm=T)-((2*mean^2)*count)+(count*mean^2)
-  Var<-Var/(count-1)
-  Std.Dev<-sqrt(Var)
-  Range<-Max-Min
-  
-  vector<-round(c("Min"=Min,"Mean"=mean,"Max"=Max,"Var"=Var,
-                  "Std.Dev"=Std.Dev,"Range"=Range,"Sum"=sum_x,"Count"=count),dec)
-  #vector<-t(as.matrix(vector))
-  #rownames(vector)<-substr(paste(names(attributes(x)$var.lab),attributes(x)$var.lab),1,20)
-  return(vector)
-}#deshuso
-
-desc<-function(x,w,stat,dec){
-  if(missing(dec)) dec<-2
-  if(missing(stat)) {
-    stat<-c("Min","Mean","Std.Dev","Max","Sum","Count")
-  }else{
-    indices<-c(c("Min","Mean","Max","Var","Std.Dev","Range","Sum","Count")%in%stat)
-    stat<-c("Min","Mean","Max","Var","Std.Dev","Range","Sum","Count")[indices]
-  }
-  if(is.data.frame(x)){
-    if(missing(w)) w<-rep(1,nrow(x))
-    delete<-which(sapply(x,class)%in%c("character","factor"))
-    
-    if(length(delete)>0){
-      tabla<-t(sapply(x[,-delete,drop=F],function(k)suppressWarnings(.desc(x=k,w=w,stat=stat,dec=dec))))[,stat,drop=F]
-      labelsx<-sapply(x[,-delete,drop=F],function(k)attr(k,"var.lab"))
-      rownames(tabla)<-substr(paste(rownames(tabla),labelsx),1,20)
-      cat("This descriptive exclude next variables:",names(x)[delete],"\n\n")
-      return(tabla)
-    }else{
-      tabla<-t(sapply(x,function(k)suppressWarnings(.desc(x=k,w=w,stat=stat,dec=dec))))[,stat,drop=F]
-      labelsx<-sapply(x,function(k)attr(k,"var.lab"))
-      rownames(tabla)<-substr(paste(rownames(tabla),labelsx),1,20)
-      return(tabla)
-    }
-    
-  }else{
-    if(missing(w)) w<-rep(1,length(x))
-    tabla<-t(as.matrix(suppressWarnings(.desc(x=x,w=w,stat=stat,dec=dec))[stat]))
-    rownames(tabla)<-substr(paste(names(attributes(x)$var.lab),attributes(x)$var.lab),1,20)
-    return(tabla)
-  }
-}#deshuso
-
 .crostab<-function(x,y,w,cells,dec){
   
   absolutos<-tapply(w,list(x,y),sum,na.rm=T)
@@ -326,7 +275,7 @@ if (missing(stat)) stat<-c("Min","Mean","Std.dev","Max","Sum","Count")
 if(missing(dec)) dec<-2
   
 if(missing(w)){  
-  suppressWarnings(round(sapply(stat,function(k){    
+vector<-suppressWarnings(round(sapply(stat,function(k){    
     switch(k,
            Mean = Mean(x),
            Var=Var(x),
@@ -339,7 +288,7 @@ if(missing(w)){
     )}),dec))
   }else{
  
-    suppressWarnings(round(sapply(stat,function(k){    
+vector<-suppressWarnings(round(sapply(stat,function(k){    
       switch(k,
              Mean = Mean(x,w),
              Var=Var(x,w),
@@ -350,7 +299,19 @@ if(missing(w)){
              Max=max(x,na.rm=T),
              Range=range(x,na.rm=T)
       )}),dec))
-    }
+  }
+vector<-structure(vector,title=attr(x,"var.lab"),class=c("Descriptive",class(vector)))
+return(vector)
+}
+           
+print.Descriptive<-function(x){
+  row_names<-attr(x,"title")
+  col_names<-names(x)
+  attributes(x)<-NULL
+  dim(x)<-c(1,length(x))
+  rownames(x)<-row_names
+  colnames(x)<-col_names
+  print(x)
 }
 
 desc<-function(x,...){
