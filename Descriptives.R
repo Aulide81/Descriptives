@@ -582,11 +582,10 @@ print.Frequencies<-function(x){
   cat("\n",resumen,"\n\n")
 }
 
-.c<- function(...){
-  arguments <-as.list(match.call())
-  vector<-sapply(arguments,function(k)as.character(k))[-1]
-  unique(vector)
-}
+.c<-function(...){
+  valor<-as.character(match.call())[-1]
+  unique(valor)
+}                 
 
 ##analisis factorial por componentes principales
 #x<-as.matrix(iris[,c(1:4)])
