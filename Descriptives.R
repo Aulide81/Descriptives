@@ -585,7 +585,15 @@ print.Frequencies<-function(x){
 .c<-function(...){
   valor<-as.character(match.call())[-1]
   unique(valor)
-}                 
+}    
+            
+compcharacter<-function(x){
+etiquetas<-attr(x,"val.lab")
+if(is.null(etiquetas)) stop("No value labels in x")
+vector<-names(etiquetas)[match(x,etiquetas)]
+vector[is.na(vector)]<-x[is.na(vector)]
+vector
+}
 
 ##analisis factorial por componentes principales
 #x<-as.matrix(iris[,c(1:4)])
