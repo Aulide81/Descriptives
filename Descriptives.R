@@ -570,16 +570,10 @@ freq.matrix<-function (x, ...) {apply(x,2, .frequencies, ...)}
 }
             
 print.Frequencies<-function(x){
-  dimension<-dim(x)
-  col_names<-colnames(x)
-  row_names<-rownames(x)      
-  title<-attr(x,"title")
-  resumen<-attr(x,"resumen")
-  attributes(x) <- NULL
-  x<-structure(x,dim=dimension,dimnames=list(row_names,col_names))
-  cat(title,"\n\n")
-  print(x,na.print="")
-  cat("\n",resumen,"\n\n")
+  options(knitr.kable.NA = '')
+    cat(attr(x,"title"))
+    print(knitr::kable(x,format="pandoc"))
+    cat("\n",attr(x,"resumen"),"\n")
 }
 
 .c<-function(...){
