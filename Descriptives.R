@@ -373,6 +373,7 @@ if(missing(w)){
   tabla<-t(sapply(i,function(k)
     desc(x[y==k],w[y==k],stat=stat,dec=dec)))
 }
+if (nrow(tabla)==1) tabla<-t(tabla)
 
 rownames(tabla)<-i
 
